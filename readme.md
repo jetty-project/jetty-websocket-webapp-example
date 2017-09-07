@@ -6,16 +6,21 @@ This checkout is a valid ${jetty.base} directory too.
 
 To build:
 
-  $ mvn clean install
+    $ mvn clean install
 
   This should have created a webapps/root.war file for you
+  
+To run using jetty home:
+  
+    $ java -jar /path/to/jetty-home-9.4.6.v20170531/start.jar
+
 
 To run in jetty distribution:
 
-  $ java -jar /path/to/jetty-distribution-9.4.6.v20170531/start.jar
+    $ java -jar /path/to/jetty-distribution-9.4.6.v20170531/start.jar
 
 To test:
 
-  1) Open http://localhost:8080/ in your websocket capable web browser
+  1) Open [http://localhost:8080/](http://localhost:8080/) in your websocket capable web browser
 
 
