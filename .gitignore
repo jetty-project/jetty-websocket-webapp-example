@@ -38,3 +38,5 @@ bin/
 # merge tooling
 *.orig
 
+# No Wars
+*.war
