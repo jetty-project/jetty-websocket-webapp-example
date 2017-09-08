@@ -21,6 +21,6 @@ To run in jetty distribution:
 
 To test:
 
-  1) Open [http://localhost:8080/](http://localhost:8080/) in your websocket capable web browser
+  1) Open [http://localhost:8080/demo](http://localhost:8080/demo) in your websocket capable web browser
 
 

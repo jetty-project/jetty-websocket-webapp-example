@@ -87,8 +87,11 @@
             <phase>install</phase>
             <configuration>
               <target>
+                <delete>
+                  <fileset dir="${project.basedir}/webapps/" includes="*.war"/>
+                </delete>
                 <copy file="${project.build.directory}/${project.build.finalName}.war"
-                      tofile="${project.basedir}/webapps/root.war"/>
+                      tofile="${project.basedir}/webapps/demo.war"/>
               </target>
             </configuration>
           </execution>

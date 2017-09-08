@@ -9,7 +9,7 @@ timerJs.set({ time : 1000, autostart : true });
 
 /* Servlet Update */
 
-var urlServlet = window.location.toString().replace('/index.html','/') + "time";
+var urlServlet = window.location.toString().replace('/index.html','/') + "time/servlet";
 
 var timerServlet = $.timer(function() {
     $.get(urlServlet, function(responseText) {
@@ -28,7 +28,7 @@ var urlWebSocket = window.location.toString()
                          .replace('/index.html', '/')
                          .replace('http://', 'ws://')
                          .replace('https://', 'wss://')
-                         + "timews";
+                         + "time/websocket";
 
 function initWebSocket()
 {

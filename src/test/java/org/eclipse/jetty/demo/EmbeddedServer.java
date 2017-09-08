@@ -20,7 +20,7 @@ public class EmbeddedServer
                         "org.eclipse.jetty.annotations.AnnotationConfiguration");
 
         WebAppContext webapp = new WebAppContext();
-        webapp.setContextPath("/");
+        webapp.setContextPath("/demo");
         webapp.setBaseResource(new PathResource(MavenTestingUtils.getProjectDirPath("src/main/webapp")));
         webapp.setExtraClasspath(MavenTestingUtils.getTargetPath("classes").toRealPath().toString());
 
