@@ -1,5 +1,5 @@
 
-Example of using WebSocket on Jetty.
+Example of a WebSocket echo on Jetty using the Native WebSocket API.
 
 This project uses maven.
 This checkout is a valid ${jetty.base} directory too.
@@ -12,12 +12,7 @@ To build:
   
 To run using jetty home:
   
-    $ java -jar /path/to/jetty-home-9.4.6.v20170531/start.jar
-
-
-To run in jetty distribution:
-
-    $ java -jar /path/to/jetty-distribution-9.4.6.v20170531/start.jar
+    $ java -jar /path/to/jetty-home/start.jar
 
 To test:
 
