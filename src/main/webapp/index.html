@@ -1,5 +1,6 @@
 
-<html><head>
+<html>
+<head>
     <title>WebSocket Chat</title>
     <script type='text/javascript'>
 
@@ -35,14 +36,19 @@
 
             _close: function(message){
                 if (this._ws)
-                    this._ws.close(1000, 'Client Initiated Close');
+                    this._ws.close(1000, message);
             },
 
             display: function(header, text){
                 if (text == null)
                     text='';
                 else
-                    text=text.replace('<','&lt;').replace('>','&gt;');
+                    text=text
+                        .replace('<','&lt;')
+                        .replace('>','&gt;')
+                        .replace('&','&amp;')
+                        .replace('\"','&quot')
+                        .replace('\'','&#x27;');
 
                 var chat=$('chat');
                 var spanFrom = document.createElement('span');
@@ -65,11 +71,11 @@
             },
 
             _onclose: function(m) {
+                room.display('Closed', "{code:" + m.code + ", clean:" + m.wasClean + ", reason:\'" + m.reason + "\'}");
                 this._ws=null;
                 $('uriSelect').className='';
                 $('connect').className='';
                 $('connected').className='hidden';
-                $('chat').innerHTML='';
             }
 
         };
@@ -77,7 +83,7 @@
 
     <style type='text/css'>
         div { border: 0px solid black; }
-        div#chat { clear: both; width: 40em; height: 4ex; overflow: auto; background-color: #f0f0f0; padding: 4px; border: 1px solid black; }
+        div#chat { clear: both; width: 40em; height: 20ex; overflow: auto; background-color: #f0f0f0; padding: 4px; border: 1px solid black; }
         div#input { clear: both; width: 40em; padding: 4px; background-color: #e0e0e0; border: 1px solid black; border-top: 0px }
         input#phrase { width:30em; background-color: #e0f0f0; }
         input#username { width:14em; background-color: #e0f0f0; }
@@ -87,59 +93,62 @@
     </style>
 </head>
 <body>
-<div id='uriSelect' >
-    <button onclick='$("wsPath").value = path + "websocket/servlet/echo";'>Use WebSocket Servlet URI</button>
-    <button onclick='$("wsPath").value = path + "websocket/filter/echo";'>Use WebSocket Filter URI</button>
-</div>
-<div id='chat'></div>
-<div id='input'>
-    <div id='connect' >
-        <input id='wsPath' type='text' style="width: 400px;"/>
-        <input id='connectB' class='button' type='submit' name='connect' value='Connect'/>
+    <div id='uriSelect' >
+        <button onclick='$("wsPath").value = path + "websocket/servlet/echo";'>Use WebSocket Servlet URI</button>
+        <button onclick='$("wsPath").value = path + "websocket/filter/echo";'>Use WebSocket Filter URI</button>
     </div>
-    <div id='connected' class='hidden'>
-        Message:&nbsp;
-        <input id='phrase' type='text'/>
-        <input id='sendB' class='button' type='submit' name='join' value='Send'/>
-        <input id='closeB' class='button' type='submit' name='close' value='Close'/>
+    <div id='chat'></div>
+    <div id='input'>
+        <div id='connect' >
+            <input id='wsPath' type='text' style="width: 400px;"/>
+            <input id='connectB' class='button' type='submit' name='connect' value='Connect'/>
+            <button onclick='$("chat").innerHTML="";'>Clear</button>
+        </div>
+        <div id='connected' class='hidden'>
+            Message:&nbsp;
+            <input id='phrase' type='text'/>
+            <input id='sendB' class='button' type='submit' name='join' value='Send'/>
+            <input id='closeB' class='button' type='submit' name='close' value='Close'/>
+        </div>
     </div>
-</div>
 
-<script type='text/javascript'>
-    var path = document.location.toString().replace('http://','ws://').replace('https://','wss://');
-    $('wsPath').setAttribute('autocomplete','OFF');
-    $('connectB').onclick = function(event)
-    {
-        room.join($('wsPath').value);
-        return false;
-    };
+    <script type='text/javascript'>
+        var path = document.location.toString().replace('http://','ws://').replace('https://','wss://');
+        $('wsPath').setAttribute('autocomplete','OFF');
+        $('connectB').onclick = function(event)
+        {
+            room.join($('wsPath').value);
+            return false;
+        };
 
-    $('phrase').setAttribute('autocomplete','OFF');
-    $('phrase').onkeyup = function(ev)
-    {
-        var keyc=getKeyCode(ev);
-        if (keyc==13 || keyc==10)
+        const phrase = $('phrase');
+        phrase.setAttribute('autocomplete','OFF');
+        phrase.onkeyup = function(ev)
+        {
+            var keyc=getKeyCode(ev);
+            if (keyc===13 || keyc===10)
+            {
+                room._send($F('phrase'));
+                $('phrase').value='';
+                return false;
+            }
+            return true;
+        };
+
+        $('sendB').onclick = function(event)
         {
             room._send($F('phrase'));
             $('phrase').value='';
             return false;
-        }
-        return true;
-    };
+        };
 
-    $('sendB').onclick = function(event)
-    {
-        room._send($F('phrase'));
-        $('phrase').value='';
-        return false;
-    };
+        $('closeB').onclick = function(event)
+        {
+            room._close($F('phrase'));
+            $('phrase').value='';
+            return false;
+        };
 
-    $('closeB').onclick = function(event)
-    {
-        room._close();
-        return false;
-    };
-
-</script>
+    </script>
 </body>
 </html>
